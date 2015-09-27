@@ -170,20 +170,20 @@ class System:
             for row in reader:
                 #print(row)
                 if not row or not row[0] or not row[0][0] == 'K': break
-                self.f.append([int(x) for x in row[1:]])
+                self.f.append([int(x) for x in row[1:] if x])
             self.m = len(self.f[0])
             self.k = len(self.f)
             # P(m)
             header = next(reader)
             pm = next(reader)
             print(pm)
-            self.message_p = [float(x) for x in pm[1:]]
+            self.message_p = [float(x) for x in pm[1:] if x]
             # P(k)
             header = next(reader)
             header = next(reader)
             pk = next(reader)
             print(pk)
-            self.key_p = [float(x) for x in pk[1:]]
+            self.key_p = [float(x) for x in pk[1:] if x]
             if 0 in self.key_p:
                 self.init_key_p(mode = 'zeros', kp = self.key_p)
 
