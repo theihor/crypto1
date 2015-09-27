@@ -93,7 +93,7 @@ def read_config(config_file_name):
     with open(config_file_name, 'r', encoding = 'utf8') as csvfile:    
         reader = csv.reader(csvfile, delimiter=',', quotechar='"', quoting = csv.QUOTE_MINIMAL, lineterminator='\n')
         header = next(reader)
-        print(header)
+        #print(header)
         res = []
         for row in reader:
             res.append({'m' : int(row[0]), 'k' : int(row[1]), 'e' : int(row[2])})
