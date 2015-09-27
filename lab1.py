@@ -118,8 +118,8 @@ def make_matrix1(m,k,e):
     elif m < k and m < e:
         res = latin_rectangle(e, ceil(k / e))
         res = res[:k]
-        for row in res:
-            row = row[:m]
+        for i in range(len(res)):
+            res[i] = res[i][:m]
     else:
         print('Invalid m, k, e parameters')
     return res
@@ -134,6 +134,6 @@ def prior_probs(n, r = True):
             s += a[i]
         for i in range(n): 
             p[i] = a[i] / s
-    return (a, p)
+    return p
         
 
