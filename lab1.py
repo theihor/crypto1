@@ -72,8 +72,10 @@ def collide(lst, row):
     return False
 
 # WARNING: BRUTE FORCE IS USED
-def latin_square(n, filter = lambda x: True):
-    r = [x + 1 for x in range(n)]
+def latin_square(n, filter = lambda x: True, lst = []):
+    if not lst: 
+        r = [x + 1 for x in range(n)]
+    else: r = lst
     all_p = all_permutations(r)
     res = []
     for i in r:
@@ -109,6 +111,31 @@ def apply_config(matrix, conf):
         matrix[k] = row
     return matrix
 
+def k_ns(k, m, e, ns = (0, 0)):
+    (n1, n2) = ns
+#    print(k,m,e,n1,n2) 
+    if k - m == 0: return (n1 + 1, n2)
+    if k - e == 0: return (n1, n2 + 1)
+
+    res1 = False
+    res2 = False
+    if k - m > 0: res1 = k_ns(k - m, m, e, (n1 + 1, n2))
+    if k - e > 0: res2 = k_ns(k - e, m, e, (n1, n2 + 1))
+
+    if res1: return res1
+    if res2: return res2
+
+    return False 
+
+def check_e_counts(table, e_):
+    res = []
+    for col in [list(x) for x in zip(*table)]:
+        s = 0
+        for e in col:
+            if e == e_: s += 1
+        res.append(s)
+    return res
+
 def make_matrix1(m,k,e):
     if m == k and m == e: 
         return latin_square(m)
@@ -116,12 +143,19 @@ def make_matrix1(m,k,e):
         res = latin_rectangle(m, ceil(k / m))
         res = res[:k]
     elif m < k and m < e:
-        res = latin_rectangle(e, ceil(k / e))
-        res = res[:k]
-        for i in range(len(res)):
-            res[i] = res[i][:m]
+        (n1, n2) = k_ns(k,m,e)
+        res = []
+        for i in range(n2):
+            s = latin_square(e)[:m]
+            res += s
+        for i in range(n1):
+            lst = list(range(1, e + 1))
+            random.shuffle(lst)
+            s = latin_square(m, filter = lambda x: not x in res, lst = lst[:m])
+            res += s
     else:
         print('Invalid m, k, e parameters')
+
     return res
    
 def prior_probs(n, r = True):
